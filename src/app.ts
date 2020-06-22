@@ -6,7 +6,6 @@ import bodyParser from 'body-parser';
 import * as dotenv from 'dotenv';
 
 import routes from './routes';
-import { PATHNAME_PREFIX } from './vars';
 
 dotenv.config();
 
@@ -35,6 +34,11 @@ const corsOpts: CorsOptions = {
 app.use(bodyParser.json()).use(morgan('dev')).use(cors(corsOpts));
 
 app.options('*', cors(corsOpts));
+
+const PATHNAME_PREFIX: string | undefined = process.env.PATHNAME_PREFIX;
+if (!PATHNAME_PREFIX) {
+	throw new Error('Missing Pathname Prefix');
+}
 
 app.use(PATHNAME_PREFIX, routes);
 
